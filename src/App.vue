@@ -11,7 +11,7 @@ h2 {
 @import './assets/less/app.less';
 h2 {
     font-weight: bold;
-    background-color: blue;
+    background-color: red;
 }
 </style>
 <script lang="ts">

@@ -25,7 +25,8 @@ module.exports = merge(webpackbaseconfig, {
             {
                 test: /\.less$/,
                 use: [
-                    { loader: 'vue-style-loader' },
+                    // { loader: 'vue-style-loader' }, // 没什么用
+                    { loader: 'style-loader' },
                     {
                         loader: 'css-loader',
                         options: {
