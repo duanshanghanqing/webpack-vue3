@@ -1,12 +1,15 @@
 <template>
-    <h2>This is a Vue 3 component!</h2>
-    <button @click="increase">Clicked {{ count }} times.</button>
+    <button @click="increase">
+        Clicked {{ count }} times.
+    </button>
 </template>
+
 <style scoped>
-h2 {
-    color: aqua;
-}
+    h2 {
+        color: aqua;
+    }
 </style>
+
 <style scoped lang="less" rel="stylesheet/less">
 @import './assets/less/app.less';
 h2 {
@@ -14,12 +17,13 @@ h2 {
     background-color: red;
 }
 </style>
+
 <script lang="ts">
 import { defineComponent, ref } from "vue";
 // This class break the webpack vue-loader
 class Test {
     myTest = "ok";
-}
+};
 export default defineComponent({
     setup() {
         const count = ref(0);

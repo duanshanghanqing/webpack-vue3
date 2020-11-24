@@ -6,15 +6,22 @@
   "scripts": {
     "start": "webpack-dev-server --progress --config ./build/webpack.dev.server.config.js",
     "dev": "webpack --progress --config ./build/webpack.dev.config.js",
-    "build": "webpack --progress --config ./build/webpack.prod.config.js"
+    "build": "webpack --progress --config ./build/webpack.prod.config.js",
+    "lint:create": "eslint --init",
+    "lint": "eslint --ext .js,.vue src",
+    "lint-fix": "eslint --fix --ext .js,.vue src"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^4.8.2",
+    "@typescript-eslint/parser": "^4.8.2",
     "@vue/compiler-sfc": "^3.0.2",
     "autoprefixer": "^8.0.0",
     "css-loader": "^5.0.1",
+    "eslint": "^7.14.0",
+    "eslint-plugin-vue": "^7.1.0",
     "html-webpack-plugin": "^4.5.0",
     "less": "^3.12.2",
     "less-loader": "^7.1.0",
@@ -25,7 +32,6 @@
     "ts-loader": "^8.0.11",
     "typescript": "^4.0.5",
     "vue-loader": "^16.0.0-rc.1",
-    "vue-style-loader": "^4.1.2",
     "webpack": "^4.42.0",
     "webpack-cli": "3.x",
     "webpack-dev-server": "^3.11.0",
