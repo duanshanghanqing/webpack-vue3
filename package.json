@@ -2,7 +2,6 @@
   "name": "webpack-vue3",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
   "scripts": {
     "start": "webpack-dev-server --progress --config ./build/webpack.dev.server.config.js",
     "dev": "webpack --progress --config ./build/webpack.dev.config.js",
