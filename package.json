@@ -8,8 +8,8 @@
     "dev": "webpack --progress --config ./build/webpack.dev.config.js",
     "build": "webpack --progress --config ./build/webpack.prod.config.js",
     "lint:create": "eslint --init",
-    "lint": "eslint --ext .js,.vue src",
-    "lint-fix": "eslint --fix --ext .js,.vue src"
+    "lint": "eslint --ext .ts src",
+    "lint-fix": "eslint --fix --ext .ts src"
   },
   "keywords": [],
   "author": "",
