@@ -7,10 +7,16 @@
     <p>{{ double }}</p>
     <br />
 
+    <h2>动态添加属性</h2>
     <ul>
-        <li v-for="number of numbers" :key="number">{{ number }}</li>
+      <li v-for="number of numbers" :key="number">{{ number }}</li>
     </ul>
     <div>{{ person.name }}</div>
+
+    <br />
+    <h2>watch</h2>
+    <p>{{ greetings }}</p>
+    <button @click="updataGreeting">updataGreeting</button>
   </div>
 </template>
 
@@ -24,7 +30,7 @@ h2 {
 @import "./assets/less/app.less";
 h2 {
   font-weight: bold;
-  background-color: red;
+  background-color: rgb(32, 163, 119);
 }
 </style>
 
@@ -77,37 +83,66 @@ export default defineComponent({
 })
 */
 
-import { defineComponent, ref, computed, reactive, toRefs } from "vue";
+import { defineComponent, ref, computed, reactive, toRefs, watch } from "vue";
 export default defineComponent({
-    setup() {
-        const data = reactive({
-            count: 0,
-            increase: () => { data.count++; }, // 每次加1
-            double: computed(() => data.count * 2), // count 变化 * 2
+  setup() {
+    const data = reactive({
+      count: 0,
+      increase: () => {
+        data.count++;
+      }, // 每次加1
+      double: computed(() => data.count * 2), // count 变化 * 2
 
-            // vue2 返回的data是个响应式对象，不支持对象动态添加属性成响应式，数组添动态加元素成响应式，
-            // 需要使用 Vue.set(vm.obj, 'b', 2), this.set(this.obj, 'b', 2) 来解决
-            // 因为 vue2 使用了 Object.defineProperty(data, 'count', { get() {}, set() {} }) , 
-            // 这个方法比较弱，对新新增加的key需要手动调一下
+      // vue2 返回的data是个响应式对象，不支持对象动态添加属性成响应式，数组添动态加元素成响应式，
+      // 需要使用 Vue.set(vm.obj, 'b', 2), this.set(this.obj, 'b', 2) 来解决
+      // 因为 vue2 使用了 Object.defineProperty(data, 'count', { get() {}, set() {} }) ,
+      // 这个方法比较弱，对新新增加的key需要手动调一下
 
-            // vue3使用了 new Proxy(data, { get(key) {}, set(key, value) {}, }), 对任意key进行拦截
+      // vue3使用了 new Proxy(data, { get(key) {}, set(key, value) {}, }), 对任意key进行拦截
 
-            numbers: [],
-            person: {},
-        });
+      numbers: [],
+      person: {},
+    });
 
-        // 两秒后就渲染在模版上了, 让 Vue.set 成了过去式
-        setTimeout(() => {
-            data.numbers[0] = 1;
-            data.numbers.push(2);
-            data.person.name = '张三';
-        }, 2000);
+    // 两秒后就渲染在模版上了, 让 Vue.set 成了过去式
+    setTimeout(() => {
+      data.numbers[0] = 1;
+      data.numbers.push(2);
+      data.person.name = "张三";
+    }, 2000);
 
-        // 需要用 toRefs 包一下
-        return {
-            ...toRefs(data)
-        }
+    // 测试watch
+    const greetings = ref("");
+    const updataGreeting = () => {
+      greetings.value += "Hello! ";
+    };
+    // 监听的是一个响应式对象，同时监听多个，就是个数组
+    // watch(greetings, (newValue, oldValue) => {
+    //   console.log("newValue", newValue);
+    //   console.log("oldValue", oldValue);
+    //   document.title = `${greetings.value}`;
+    // });
 
-    }
-})
+    // 监听多个值
+    // watch([greetings, data], (newValue, oldValue) => {
+    //   console.log("newValue", newValue);
+    //   console.log("oldValue", oldValue);
+    //   document.title = `${greetings.value} ${data.count}`;
+    // });
+
+    // 监听具体值, 响应式具体值需要用 函数包装一下
+    watch([greetings, () => data.count], (newValue, oldValue) => {
+      console.log("newValue", newValue);
+      console.log("oldValue", oldValue);
+      document.title = `${greetings.value} ${data.count}`;
+    });
+
+    // 需要用 toRefs 包一下
+    return {
+      ...toRefs(data),
+      greetings,
+      updataGreeting,
+    };
+  },
+});
 </script>
