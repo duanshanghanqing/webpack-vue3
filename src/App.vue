@@ -17,6 +17,10 @@
     <h2>watch</h2>
     <p>{{ greetings }}</p>
     <button @click="updataGreeting">updataGreeting</button>
+
+    <br />
+    <h2>显示坐标</h2>
+    <p>x: {{ x }}, y: {{ y }}</p>
   </div>
 </template>
 
@@ -84,6 +88,7 @@ export default defineComponent({
 */
 
 import { defineComponent, ref, computed, reactive, toRefs, watch } from "vue";
+import useMousePosition from "./hooks/useMousePosition";
 export default defineComponent({
   setup() {
     const data = reactive({
@@ -137,11 +142,13 @@ export default defineComponent({
       document.title = `${greetings.value} ${data.count}`;
     });
 
-    // 需要用 toRefs 包一下
+    const { x, y } = useMousePosition();
     return {
-      ...toRefs(data),
+      ...toRefs(data), // 需要用 toRefs 包一下
       greetings,
       updataGreeting,
+      x,
+      y,
     };
   },
 });
