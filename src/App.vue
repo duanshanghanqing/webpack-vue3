@@ -21,6 +21,30 @@
     <br />
     <h2>显示坐标</h2>
     <p>x: {{ x }}, y: {{ y }}</p>
+
+    <br />
+    <h2>加载图片</h2>
+    <p v-if="loading">加载中...</p>
+    <img v-if="result" :src="result.message" />
+
+    <br />
+    <h2>Modal</h2>
+    <div>
+      <button @click="setModalIsOpen(true)">打开</button>
+      <button @click="setModalIsOpen(false)">关闭</button>
+    </div>
+    <Modal :isOpen="modalIsOpen" @close-modal="setModalIsOpen(false)" />
+
+    <br />
+    <h2>AsyncShow</h2>
+    <Suspense>
+      <template #default>
+        <async-show />
+      </template>
+      <template #fallback>
+        <h1>加载中...</h1>
+      </template>
+    </Suspense>
   </div>
 </template>
 
@@ -89,8 +113,15 @@ export default defineComponent({
 
 import { defineComponent, ref, computed, reactive, toRefs, watch } from "vue";
 import useMousePosition from "./hooks/useMousePosition";
+import useURLLoader from "./hooks/useURLLoader";
+import Modal from "./components/Modal.vue";
+import AsyncShow from "./components/AsyncShow.vue";
+interface DogResult {
+  message: string;
+  status: string;
+}
 export default defineComponent({
-  setup() {
+  setup(props, context) {
     const data = reactive({
       count: 0,
       increase: () => {
@@ -143,13 +174,30 @@ export default defineComponent({
     });
 
     const { x, y } = useMousePosition();
+    const { result, loading } = useURLLoader<DogResult>(
+      "https://dog.ceo/api/breeds/image/random"
+    );
+    // https://api.thecatapi.com/v1/images/search?limit=1
+
+    const modalIsOpen = ref(false);
+    const setModalIsOpen = (isOpen: boolean) => {
+      modalIsOpen.value = isOpen;
+    };
     return {
       ...toRefs(data), // 需要用 toRefs 包一下
       greetings,
       updataGreeting,
       x,
       y,
+      result,
+      loading,
+      modalIsOpen,
+      setModalIsOpen,
     };
+  },
+  components: {
+    Modal,
+    AsyncShow,
   },
 });
 </script>
