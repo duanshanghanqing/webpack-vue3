@@ -39,7 +39,10 @@
     <h2>AsyncShow</h2>
     <Suspense>
       <template #default>
-        <async-show />
+        <div>
+          <async-show />
+          <dog-show />
+        </div>
       </template>
       <template #fallback>
         <h1>加载中...</h1>
@@ -111,17 +114,23 @@ export default defineComponent({
 })
 */
 
-import { defineComponent, ref, computed, reactive, toRefs, watch } from "vue";
+import { defineComponent, ref, computed, reactive, toRefs, watch, onErrorCaptured } from "vue";
 import useMousePosition from "./hooks/useMousePosition";
 import useURLLoader from "./hooks/useURLLoader";
 import Modal from "./components/Modal.vue";
 import AsyncShow from "./components/AsyncShow.vue";
+import DogShow from './components/DogShow.vue';
 interface DogResult {
   message: string;
   status: string;
 }
 export default defineComponent({
   setup(props, context) {
+    onErrorCaptured((e: any) => {
+      console.log(e);
+      return true;// 表示向上传播
+    });
+
     const data = reactive({
       count: 0,
       increase: () => {
@@ -198,6 +207,7 @@ export default defineComponent({
   components: {
     Modal,
     AsyncShow,
+    DogShow,
   },
 });
 </script>
